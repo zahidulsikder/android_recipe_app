@@ -15,6 +15,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import my.recipy.app.Listeners.RecipeClickListener;
 import my.recipy.app.Models.Recipe;
 import my.recipy.app.R;
 
@@ -22,10 +23,12 @@ public class RandomRecipeAdapter extends RecyclerView.Adapter<RandomRecipeViewHo
 
     Context context;
     List<Recipe> list;
+    RecipeClickListener listener;
 
-    public RandomRecipeAdapter(Context context, List<Recipe> list) {
+    public RandomRecipeAdapter(Context context, List<Recipe> list, RecipeClickListener listener) {
         this.context = context;
         this.list = list;
+        this.listener= listener;
     }
 
     @NonNull
@@ -42,6 +45,12 @@ public class RandomRecipeAdapter extends RecyclerView.Adapter<RandomRecipeViewHo
         holder.textView_servings.setText(list.get(position).servings+ "Servings");
         holder.textView_time.setText(list.get(position).readyInMinutes+ "Minutes");
         Picasso.get().load(list.get(position).image).into(holder.imageView_food);
+        holder.random_list_container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onRecipeClicked(String.valueOf(list.get(holder.getAdapterPosition()).id));
+            }
+        });
     }
 
     @Override
@@ -64,5 +73,9 @@ class  RandomRecipeViewHolder extends RecyclerView.ViewHolder {
         textView_time = itemView.findViewById(R.id.textView_time);
         imageView_food = itemView.findViewById(R.id.imageView_food);
 
-    }
+    };
+
+
+
+
 }
